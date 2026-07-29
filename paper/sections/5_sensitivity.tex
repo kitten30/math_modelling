@@ -1,0 +1,48 @@
+\section{Sensitivity Analysis}
+
+\subsection{Environmental Parameters}
+
+We examine the sensitivity of net cooling power to variations in key environmental parameters around baseline values ($T_{\text{amb}} = 300$ K, $h_c = 6.9$ W/(m$^2\cdot$K), clear-sky conditions).
+
+\begin{table}[htbp]
+  \centering
+  \caption{Sensitivity of $P_{\text{cool}}$ to environmental parameters (d = 50 $\mu$m PDMS)}
+  \begin{tabular}{c|c|c|c}
+    \toprule
+    \textbf{Parameter} & \textbf{Variation} & $P_{\text{cool}}$ (W/m$^2$) & \textbf{Change} \\
+    \midrule
+    Baseline & -- & 76.1 & -- \\
+    $T_{\text{amb}} = 295$ K & $-5$ K & 62.4 & $-18.0\%$ \\
+    $T_{\text{amb}} = 305$ K & $+5$ K & 89.8 & $+18.0\%$ \\
+    $h_c = 3.0$ W/(m$^2\cdot$K) & Low wind & 78.3 & $+2.9\%$ \\
+    $h_c = 12.0$ W/(m$^2\cdot$K) & High wind & 73.2 & $-3.8\%$ \\
+    Humid atmosphere & Higher H$_2$O & 58.7 & $-22.9\%$ \\
+    Arid atmosphere & Lower H$_2$O & 88.5 & $+16.3\%$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The cooling power shows moderate sensitivity to ambient temperature ($\sim$3.6 W/m$^2$ per K) and strong sensitivity to atmospheric humidity. High water vapor content reduces the atmospheric window transmittance, significantly degrading cooling performance. This highlights the importance of deploying radiative cooling technology in arid and semi-arid climates.
+
+\subsection{Fabrication Tolerance}
+
+Table \ref{tab:fabrication} examines the impact of $\pm$10\% thickness variations on cooling performance. The PDMS thickness is the most critical parameter, with $\pm$10\% variation causing approximately $\pm$2--3\% change in $P_{\text{cool}}$. The Ag and SiO$_2$ layers show negligible sensitivity, confirming the robustness of the design against manufacturing tolerances.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Fabrication tolerance analysis ($\pm$10\% thickness variation)}
+  \label{tab:fabrication}
+  \begin{tabular}{c|c|c}
+    \toprule
+    \textbf{Layer} & \textbf{Thickness Range} & $P_{\text{cool}}$ Range (W/m$^2$) \\
+    \midrule
+    Ag & 90--110 nm & 76.0--76.2 \\
+    SiO$_2$ & 450--550 nm & 75.8--76.4 \\
+    PDMS & 45--55 $\mu$m & 74.1--77.8 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Refractive Index Uncertainty}
+
+The Drude-Lorentz oscillator parameters have inherent uncertainties from experimental measurements. A $\pm$5\% perturbation in the oscillator strengths produces less than 3\% variation in the predicted 8--13 $\mu$m emissivity, confirming that the model predictions are robust to input parameter uncertainties.

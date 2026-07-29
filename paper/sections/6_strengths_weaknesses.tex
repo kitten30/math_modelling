@@ -1,0 +1,43 @@
+\section{Model Evaluation}
+
+\subsection{Strengths}
+
+\begin{enumerate}
+  \item \textbf{Physically rigorous foundation:} The Transfer Matrix Method with Airy summation provides an exact solution to Maxwell's equations for planar multilayer structures, avoiding approximations inherent in effective medium theories. The incorporation of complex refractive indices captures both interference and absorption effects accurately.
+
+  \item \textbf{Comprehensive cooling model:} The net cooling power calculation integrates blackbody radiation, atmospheric counter-radiation (with angle-dependent emissivity from MODTRAN), solar absorption (AM1.5 spectrum), and non-radiative heat transfer, providing a complete energy balance.
+
+  \item \textbf{Systematic optimization framework:} The multilayer design methodology progresses logically from single-layer analysis through parameter scanning to comprehensive economic evaluation, enabling informed design decisions.
+
+  \item \textbf{Computational efficiency:} The Airy summation formulation avoids the numerical instabilities of the conventional characteristic matrix method for absorbing layers while maintaining exactness of the solution.
+
+  \item \textbf{Robustness:} Sensitivity analysis demonstrates that the optimal design is tolerant to manufacturing variations, supporting practical implementation.
+\end{enumerate}
+
+\subsection{Weaknesses}
+
+\begin{enumerate}
+  \item \textbf{Simplified atmospheric model:} The MODTRAN-based atmospheric transmittance is an approximation that does not capture real-time weather variations. A more sophisticated model incorporating local humidity, aerosol, and cloud data would improve prediction accuracy.
+
+  \item \textbf{Planar interface assumption:} Surface roughness and interface diffusion, which can affect optical performance in real fabricated devices, are neglected. For spin-coated PDMS on sputtered layers, some interfacial mixing is inevitable.
+
+  \item \textbf{Lumped non-radiative model:} The single-parameter $h_c$ model for convection does not distinguish between conductive, convective, and radiative parasitic heat paths, each with different temperature and wind-speed dependencies.
+
+  \item \textbf{Static analysis:} The steady-state assumption does not capture diurnal temperature cycles, transient cloud effects, or seasonal variations, which are important for real-world performance assessment.
+
+  \item \textbf{Material data limitations:} The Drude-Lorentz oscillator parameters are derived from bulk PDMS measurements and may not perfectly represent thin-film optical constants, which can differ due to molecular orientation and density variations.
+\end{enumerate}
+
+\subsection{Model Extensions}
+
+The modeling framework can be extended to:
+
+\begin{enumerate}
+  \item \textbf{Nanostructured surfaces:} Incorporation of grating or photonic crystal structures for enhanced spectral selectivity using rigorous coupled-wave analysis (RCWA).
+
+  \item \textbf{Dynamic performance:} Transient thermal modeling with hourly meteorological data to predict annual energy savings in specific geographic locations.
+
+  \item \textbf{Multiphysics coupling:} Integration with building energy simulation tools (e.g., EnergyPlus) for whole-system optimization.
+
+  \item \textbf{Machine learning acceleration:} Training surrogate models (neural networks) on the TMM physics to enable rapid exploration of vast material and thickness parameter spaces.
+\end{enumerate}

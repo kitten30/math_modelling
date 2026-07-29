@@ -1,0 +1,205 @@
+\section{Model Design and Methodology}
+
+\subsection{Notation}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Key Notation}
+  \begin{tabular}{c|l|c}
+    \toprule
+    \textbf{Symbol} & \textbf{Description} & \textbf{Unit} \\
+    \midrule
+    $\lambda$ & Wavelength & $\mu$m \\
+    $\theta$ & Incidence angle from normal & rad \\
+    $\tilde{n} = n + ik$ & Complex refractive index & -- \\
+    $d$ & Film thickness & $\mu$m \\
+    $R(\lambda,\theta)$ & Spectral reflectance & -- \\
+    $T(\lambda,\theta)$ & Spectral transmittance & -- \\
+    $\varepsilon(\lambda,\theta)$ & Spectral directional emissivity & -- \\
+    $\bar{\varepsilon}_{8-13}$ & Average emissivity in atmospheric window & -- \\
+    $I_{BB}(\lambda,T)$ & Planck blackbody spectral radiance & W/(m$^2\cdot\mu$m$\cdot$sr) \\
+    $P_{\text{rad}}$ & Outgoing thermal radiation power & W/m$^2$ \\
+    $P_{\text{atm}}$ & Absorbed atmospheric radiation & W/m$^2$ \\
+    $P_{\text{sun}}$ & Absorbed solar radiation & W/m$^2$ \\
+    $P_{\text{nonrad}}$ & Non-radiative heat transfer & W/m$^2$ \\
+    $P_{\text{cool}}$ & Net radiative cooling power & W/m$^2$ \\
+    $T_{\text{amb}}$ & Ambient temperature (300 K) & K \\
+    $\Delta T$ & Temperature drop below ambient & K \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Problem 1: Single-Layer PDMS Emissivity Model}
+
+\subsubsection{Transfer Matrix Method}
+
+For a single thin film with complex refractive index $\tilde{n} = n + ik$ and thickness $d$ between semi-infinite incident medium (air, $n_0 = 1$) and exit medium ($n_2$), the optical response is computed using the Airy summation formula:
+
+\begin{equation}
+  r = \frac{r_{01} + r_{12}\, e^{2i\beta}}{1 + r_{01} r_{12}\, e^{2i\beta}}, \quad
+  t = \frac{t_{01} t_{12}\, e^{i\beta}}{1 + r_{01} r_{12}\, e^{2i\beta}}
+  \label{eq:airy}
+\end{equation}
+
+where the phase factor is:
+\begin{equation}
+  \beta = \frac{2\pi}{\lambda}\,\tilde{n}\,d\,\cos\theta
+  \label{eq:phase}
+\end{equation}
+
+The Fresnel reflection and transmission coefficients at each interface, for $s$- and $p$-polarizations, are:
+
+\begin{equation}
+  r_{mn}^{(s)} = \frac{\tilde{n}_m \cos\theta_m - \tilde{n}_n \cos\theta_n}{\tilde{n}_m \cos\theta_m + \tilde{n}_n \cos\theta_n}, \quad
+  r_{mn}^{(p)} = \frac{\tilde{n}_n \cos\theta_m - \tilde{n}_m \cos\theta_n}{\tilde{n}_n \cos\theta_m + \tilde{n}_m \cos\theta_n}
+  \label{eq:fresnel_r}
+\end{equation}
+
+\begin{equation}
+  t_{mn}^{(s)} = \frac{2\tilde{n}_m \cos\theta_m}{\tilde{n}_m \cos\theta_m + \tilde{n}_n \cos\theta_n}, \quad
+  t_{mn}^{(p)} = \frac{2\tilde{n}_m \cos\theta_m}{\tilde{n}_n \cos\theta_m + \tilde{n}_m \cos\theta_n}
+  \label{eq:fresnel_t}
+\end{equation}
+
+Angles are related through Snell's law: $\tilde{n}_m \sin\theta_m = \tilde{n}_n \sin\theta_n$.
+
+The reflectance and transmittance for unpolarized light are:
+\begin{equation}
+  R = \frac{1}{2}\left(|r^{(s)}|^2 + |r^{(p)}|^2\right), \quad
+  T = \frac{1}{2}\left(T^{(s)} + T^{(p)}\right)
+  \label{eq:RT}
+\end{equation}
+
+By Kirchhoff's law, the spectral directional emissivity equals absorptivity:
+\begin{equation}
+  \varepsilon(\lambda, \theta) = A(\lambda, \theta) = 1 - R(\lambda, \theta) - T(\lambda, \theta)
+  \label{eq:kirchhoff}
+\end{equation}
+
+For an opaque substrate ($T=0$), this simplifies to $\varepsilon = 1 - R$.
+
+\subsubsection{PDMS Optical Constants}
+
+The complex refractive index of PDMS is modeled using a multi-oscillator Drude-Lorentz dielectric function:
+
+\begin{equation}
+  \varepsilon(\omega) = \varepsilon_{\infty} + \sum_{j=1}^{M} \frac{\omega_{p,j}^2}{\omega_{0,j}^2 - \omega^2 - i\gamma_j\omega}
+  \label{eq:drude_lorentz}
+\end{equation}
+
+where $\tilde{n} = \sqrt{\varepsilon}$ and $\omega = 2\pi c / \lambda$. The oscillator parameters capture the key Si--O--Si asymmetric stretching (9.26 $\mu$m), CH$_3$ symmetric deformation (7.94 $\mu$m), and Si--C rocking (12.5 $\mu$m) vibrational modes. In the solar spectral range (0.3--5 $\mu$m), PDMS is essentially transparent with $k < 10^{-5}$.
+
+\subsection{Problem 2: Radiative Cooling Performance Model}
+
+\subsubsection{Net Cooling Power}
+
+The net radiative cooling power is the balance of four components:
+
+\begin{equation}
+  P_{\text{cool}}(T) = P_{\text{rad}}(T) - P_{\text{atm}}(T_{\text{amb}}) - P_{\text{sun}} - P_{\text{nonrad}}(T)
+  \label{eq:pcool}
+\end{equation}
+
+\subsubsection{Outgoing Thermal Radiation}
+
+\begin{equation}
+  P_{\text{rad}}(T) = \int_{0}^{\infty} d\lambda \int_{0}^{\pi/2} 2\pi \sin\theta \cos\theta \; I_{BB}(\lambda, T) \; \varepsilon(\lambda, \theta) \; d\theta
+  \label{eq:prad}
+\end{equation}
+
+The Planck blackbody spectral radiance is:
+\begin{equation}
+  I_{BB}(\lambda, T) = \frac{2hc^2}{\lambda^5} \frac{1}{e^{hc/(\lambda k_B T)} - 1}
+  \label{eq:planck}
+\end{equation}
+
+where $h = 6.626 \times 10^{-34}$ J$\cdot$s, $c = 2.998 \times 10^{8}$ m/s, and $k_B = 1.381 \times 10^{-23}$ J/K.
+
+\subsubsection{Atmospheric Counter-Radiation}
+
+\begin{equation}
+  P_{\text{atm}}(T_{\text{amb}}) = \int_{0}^{\infty} d\lambda \int_{0}^{\pi/2} 2\pi \sin\theta \cos\theta \; I_{BB}(\lambda, T_{\text{amb}}) \; \varepsilon(\lambda, \theta) \; \varepsilon_{\text{atm}}(\lambda, \theta) \; d\theta
+  \label{eq:patm}
+\end{equation}
+
+The atmospheric emissivity is modeled from MODTRAN transmittance:
+\begin{equation}
+  \varepsilon_{\text{atm}}(\lambda, \theta) = 1 - t_{\text{atm}}(\lambda)^{1/\cos\theta}
+  \label{eq:eps_atm}
+\end{equation}
+
+\subsubsection{Solar Absorption and Non-Radiative Heat}
+
+\begin{equation}
+  P_{\text{sun}} = \int_{0}^{\infty} I_{\text{AM1.5}}(\lambda) \; \varepsilon(\lambda, \theta_{\text{sun}}) \; d\lambda
+  \label{eq:psun}
+\end{equation}
+
+\begin{equation}
+  P_{\text{nonrad}} = h_c \, (T_{\text{amb}} - T)
+  \label{eq:pnonrad}
+\end{equation}
+
+where $I_{\text{AM1.5}}$ is the ASTM G173-03 solar spectrum ($\sim$1000 W/m$^2$ total), $\theta_{\text{sun}} = 48.2^{\circ}$, and $h_c = 6.9$ W/(m$^2\cdot$K).
+
+\subsubsection{Performance Metrics}
+
+The steady-state equilibrium temperature $T_{\text{eq}}$ satisfies $P_{\text{cool}}(T_{\text{eq}}) = 0$, giving the temperature drop $\Delta T = T_{\text{amb}} - T_{\text{eq}}$. The cooling efficiency is $\eta = P_{\text{cool}} / P_{\text{sun,total}}$.
+
+\subsection{Problem 3: Multilayer Film Optimization}
+
+\subsubsection{Multilayer Transfer Matrix Method}
+
+For $N$ layers, the total reflection and transmission are obtained by recursive application of Eq.~\eqref{eq:airy}. Starting from the bottom layer, the effective reflection coefficient is computed iteratively upward:
+
+\begin{equation}
+  r_{\text{eff}}^{(j)} = \frac{r_{j,j+1} + r_{\text{eff}}^{(j+1)} e^{2i\beta_{j+1}}}{1 + r_{j,j+1} r_{\text{eff}}^{(j+1)} e^{2i\beta_{j+1}}}
+  \label{eq:recursive_tmm}
+\end{equation}
+
+\subsubsection{Candidate Structures}
+
+We evaluate three multilayer configurations:
+
+\begin{itemize}
+  \item \textbf{Structure I:} Ag (reflective) / SiO$_2$ (spacer) / PDMS (emitter)
+  \item \textbf{Structure II:} TiO$_2$/SiO$_2$ DBR (solar reflector) / PDMS (emitter)
+  \item \textbf{Structure III:} Ag / TiO$_2$ / SiO$_2$ / Al$_2$O$_3$ (gradient) / PDMS (emitter)
+\end{itemize}
+
+Candidate materials include Ag ($\tilde{n} \approx 0.15+3.5i$ visible), SiO$_2$ ($n \approx 1.46$), TiO$_2$ ($n \approx 2.6$), Al$_2$O$_3$ ($n \approx 1.77$), and PDMS ($n \approx 1.40$ visible).
+
+\subsubsection{Optimization Approach}
+
+We perform systematic parameter scanning of spacer and emitter layer thicknesses to identify the optimal balance between high 8--13 $\mu$m emissivity and low solar absorptance. The design objective is:
+
+\begin{equation}
+  \max \; F(d_1, \ldots, d_N) = w_1 \cdot \bar{\varepsilon}_{8-13} - w_2 \cdot \bar{\alpha}_{\text{solar}}
+  \label{eq:fitness}
+\end{equation}
+
+\subsection{Problem 4: Comprehensive Design and Feasibility}
+
+\subsubsection{Cost Model}
+
+The per-square-meter cost includes material, processing, and substrate costs:
+
+\begin{equation}
+  C_{\text{total}} = \sum_{j=1}^{N} \left(\rho_j d_j P_j^{\text{mat}} + C_j^{\text{proc}}\right) + C_{\text{sub}}
+  \label{eq:cost}
+\end{equation}
+
+where $\rho_j$ is density, $P_j^{\text{mat}}$ is material price per kg, and $C_j^{\text{proc}}$ is processing cost.
+
+\subsubsection{Economic Evaluation}
+
+Key economic metrics include:
+\begin{itemize}
+  \item Annual electricity savings from replaced air conditioning energy
+  \item Payback period (years to recover initial investment)
+  \item 10-year Net Present Value (NPV) with 5\% discount rate
+\end{itemize}
+
+\subsubsection{Feasibility Assessment}
+
+Technology Readiness Level (TRL) is assessed for each fabrication process. Spin-coating (PDMS) and magnetron sputtering (SiO$_2$, TiO$_2$) are at TRL 8--9, while thermal evaporation (Ag) is fully mature at TRL 9.
